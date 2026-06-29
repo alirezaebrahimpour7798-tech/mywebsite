@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اولین سایت من</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>سلام دنیا</h1>
+  <p>من دارم طراحی سایت را شروع می‌کنم.</p>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>محاسبه سن</title>
+
+<script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.min.js"></script>
+
+<style>
+body{
+    font-family: sans-serif;
+    text-align:center;
+    margin-top:100px;
+}
+
+input{
+    padding:10px;
+    font-size:18px;
+    margin:5px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:18px;
+}
+
+#result{
+    margin-top:20px;
+    font-size:24px;
+    color:blue;
+}
+</style>
+</head>
+
+<body>
+
+<h1>محاسبه دقیق سن</h1>
+
+<input id="year" placeholder="سال تولد">
+<input id="month" placeholder="ماه">
+<input id="day" placeholder="روز">
+
+<br><br>
+
+<button onclick="calculateAge()">محاسبه سن</button>
+
+<div id="result"></div>
+
+<script>
+
+function calculateAge(){
+
+let y = parseInt(document.getElementById("year").value)
+let m = parseInt(document.getElementById("month").value)
+let d = parseInt(document.getElementById("day").value)
+
+let g = jalaali.toGregorian(y,m,d)
+
+let birth = new Date(g.gy, g.gm-1, g.gd)
+let today = new Date()
+
+let years = today.getFullYear() - birth.getFullYear()
+let months = today.getMonth() - birth.getMonth()
+let days = today.getDate() - birth.getDate()
+
+if(days < 0){
+months--
+days += 30
+}
+
+if(months < 0){
+years--
+months += 12
+}
+
+document.getElementById("result").innerText =
+years + " سال و " + months + " ماه و " + days + " روز"
+
+}
+
+</script>
+
+</body>
+</html>
