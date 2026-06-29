@@ -1,93 +1,125 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اولین سایت من</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>سلام دنیا</h1>
-  <p>من دارم طراحی سایت را شروع می‌کنم.</p>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="fa">
-<head>
+
 <meta charset="UTF-8">
-<title>محاسبه سن</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ماشین حساب سن حرفه‌ای</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.min.js"></script>
 
-<style>
-body{
-    font-family: sans-serif;
-    text-align:center;
-    margin-top:100px;
-}
-
-input{
-    padding:10px;
-    font-size:18px;
-    margin:5px;
-}
-
-button{
-    padding:10px 20px;
-    font-size:18px;
-}
-
-#result{
-    margin-top:20px;
-    font-size:24px;
-    color:blue;
-}
-</style>
 </head>
 
 <body>
 
-<h1>محاسبه دقیق سن</h1>
+<div class="card">
 
-<input id="year" placeholder="سال تولد">
+<h1>Age Calculator</h1>
+
+<p class="subtitle">تاریخ تولد خود را وارد کنید</p>
+
+<div class="inputs">
+
+<input id="year" placeholder="سال">
 <input id="month" placeholder="ماه">
 <input id="day" placeholder="روز">
 
-<br><br>
+</div>
 
 <button onclick="calculateAge()">محاسبه سن</button>
 
 <div id="result"></div>
 
+<button class="share" onclick="share()">اشتراک گذاری</button>
+
+</div>
+
 <script>
 
 function calculateAge(){
 
-let y = parseInt(document.getElementById("year").value)
-let m = parseInt(document.getElementById("month").value)
-let d = parseInt(document.getElementById("day").value)
+let y=document.getElementById("year").value
+let m=document.getElementById("month").value
+let d=document.getElementById("day").value
 
-let g = jalaali.toGregorian(y,m,d)
-
-let birth = new Date(g.gy, g.gm-1, g.gd)
-let today = new Date()
-
-let years = today.getFullYear() - birth.getFullYear()
-let months = today.getMonth() - birth.getMonth()
-let days = today.getDate() - birth.getDate()
-
-if(days < 0){
-months--
-days += 30
+if(!y||!m||!d){
+document.getElementById("result").innerHTML="تاریخ تولد کامل وارد نشده"
+return
 }
 
-if(months < 0){
-years--
-months += 12
+let today=new Date()
+
+let gy=today.getFullYear()
+let gm=today.getMonth()+1
+let gd=today.getDate()
+
+let jToday=jalaali.toJalaali(gy,gm,gd)
+
+let ageYear=jToday.jy-y
+let ageMonth=jToday.jm-m
+let ageDay=jToday.jd-d
+
+if(ageDay<0){
+ageDay+=30
+ageMonth--
 }
 
-document.getElementById("result").innerText =
-years + " سال و " + months + " ماه و " + days + " روز"
+if(ageMonth<0){
+ageMonth+=12
+ageYear--
+}
+
+let birthDate=new Date(y, m-1, d)
+let diff=today-birthDate
+
+let days=Math.floor(diff/(1000*60*60*24))
+let hours=Math.floor(diff/(1000*60*60))
+let minutes=Math.floor(diff/(1000*60))
+
+let nextBirthday=new Date(gy, m-1, d)
+
+if(nextBirthday<today){
+nextBirthday.setFullYear(gy+1)
+}
+
+let daysToBirthday=Math.floor((nextBirthday-today)/(1000*60*60*24))
+
+document.getElementById("result").innerHTML=
+
+`
+<div class="box">
+سن شما: <b>${ageYear}</b> سال ${ageMonth} ماه ${ageDay} روز
+</div>
+
+<div class="box">
+روزهای زندگی: <b>${days}</b>
+</div>
+
+<div class="box">
+ساعت‌های زندگی: <b>${hours}</b>
+</div>
+
+<div class="box">
+دقیقه‌های زندگی: <b>${minutes}</b>
+</div>
+
+<div class="box">
+${daysToBirthday} روز تا تولد بعدی شما مانده
+</div>
+`
+
+}
+
+function share(){
+
+navigator.clipboard.writeText(window.location.href)
+
+alert("لینک سایت کپی شد")
 
 }
 
